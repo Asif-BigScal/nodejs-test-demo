@@ -14,7 +14,6 @@ const swaggerDocument = require('./swagger.json');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const adminRoustes = require('./routes/adminRoutes');
-const checkRoustes = require('./test');
 
 const { ValidationError } = require('express-validation');
 
@@ -42,7 +41,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/user', userRoutes);
 app.use('/posts', postRoutes);
 app.use('/admin', adminRoustes);
-app.use('/check', checkRoustes);
 
 app.get('/', (req, res) => {
     res.redirect('/posts');

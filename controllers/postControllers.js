@@ -123,7 +123,7 @@ async function addComment(req, res) {
                 $push: {
                     'postComments': commentData
                 }
-            })
+            },{timestamps: false})
             if (!updatePost) {
                 throw new Error('500-Error While updating');
             }
@@ -178,7 +178,7 @@ async function deleteComment(req, res) {
                             'postComments.$.deletedBy': req.user.id,
                             'postComments.$.deletedAt': Date.now()
                         }
-                    })
+                    }, {timestamps: false})
                     if (!updatePost) {
                         throw new Error('500-Error While Removing');
                     }

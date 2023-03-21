@@ -132,6 +132,131 @@
         }
       }
     },
+    "/user/update": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user details",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User details that needed to be updated",
+            "schema": {
+              "$ref": "#/definitions/userUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "route": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Error While updating"
+          }
+        }
+      }
+    },
+    "/user/update-password": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user details",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User details that needed to be updated",
+            "schema": {
+              "$ref": "#/definitions/userPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "route": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "409": {
+            "description": "Password Didn't Match"
+          },
+          "500": {
+            "description": "Error While updating"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Log Out",
+        "responses": {
+          "200": {
+            "description": "Data updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "route": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
     "/posts/": {
       "get": {
         "tags": [
@@ -145,6 +270,33 @@
             "schema": {
               "$ref": "#/definitions/allposts"
             }
+          }
+        }
+      }
+    },
+    "/posts/single-post": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get details of single post",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Post Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of Post",
+            "schema": {
+              "$ref": "#/definitions/allposts"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Access"
           }
         }
       }
@@ -356,7 +508,7 @@
           "200": {
             "description": "Comment deleted from the post"
           },
-          "400":{
+          "400": {
             "description": "Validation Error"
           },
           "401": {
@@ -392,7 +544,7 @@
           "200": {
             "description": "Comment deleted from the post"
           },
-          "400":{
+          "400": {
             "description": "Validation Error"
           },
           "401": {
@@ -431,6 +583,42 @@
           "type": "string"
         },
         "confirmPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "userUpdate": {
+      "required": [
+        "fullname",
+        "username",
+        "email"
+      ],
+      "properties": {
+        "fullname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "userPassword": {
+      "required": [
+        "oldpassword",
+        "newpassword",
+        "confirmpassword"
+      ],
+      "properties": {
+        "oldpassword": {
+          "type": "string"
+        },
+        "newpassword": {
+          "type": "string"
+        },
+        "confirmpassword": {
           "type": "string"
         }
       }

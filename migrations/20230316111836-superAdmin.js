@@ -3,7 +3,6 @@ module.exports = {
     const superAdminRole = await db.collection('roles').findOne({role : 'super admin'});
     const superAdmin = {
       fullName: 'Admin',
-      lastName: 'System',
       userName: 'admin0001',
       email: 'systemadmin0001@gmail.com',
       password: '456bc8d691b70463b43afe4d6664694c',
@@ -19,5 +18,6 @@ module.exports = {
   },
 
   async down(db, client) {
+      await db.collection('users').drop()
   }
 };

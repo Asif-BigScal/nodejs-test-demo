@@ -20,9 +20,15 @@
       "description": "All posts routes"
     }
   ],
-  "schemes": ["http"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "securityDefinitions": {
     "jwt": {
       "type": "apiKey",
@@ -38,9 +44,15 @@
   "paths": {
     "/user/sign-up": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "User Sign Up",
-        "consumes": ["application/json", "multipart/form-data"],
+        "security": [],
+        "consumes": [
+          "application/json",
+          "multipart/form-data"
+        ],
         "parameters": [
           {
             "name": "user",
@@ -67,10 +79,66 @@
         }
       }
     },
+    "/user/sign-in": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "User Sign In",
+        "security": [],
+        "consumes": [
+          "application/json",
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to login or authenticate",
+            "schema": {
+              "$ref": "#/definitions/userLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    },
+                    "route": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User already loggedin"
+          },
+          "422": {
+            "description": "Validation Error"
+          }
+        }
+      }
+    },
     "/posts/": {
       "get": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Get all posts when user is not Logged-In",
+        "security": [],
         "responses": {
           "200": {
             "description": "Details of Post",
@@ -81,33 +149,260 @@
         }
       }
     },
-    "/user/sign-in": {
+    "/posts/all-post": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get all posts when user is Logged-In",
+        "responses": {
+          "200": {
+            "description": "Details of Post",
+            "schema": {
+              "$ref": "#/definitions/allposts"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          }
+        }
+      }
+    },
+    "/posts/register": {
       "post": {
-        "tags": ["Users"],
-        "summary": "User Sign In",
-        "consumes": ["application/json", "multipart/form-data"],
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Register or Add new Post",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "posttitle",
+            "in": "formData",
+            "type": "string",
+            "description": "Title of the post"
+          },
+          {
+            "name": "postimage",
+            "in": "formData",
+            "type": "file",
+            "description": "Image to be uploaded"
+          },
+          {
+            "name": "postcontent",
+            "in": "formData",
+            "type": "string",
+            "description": "Content of the post"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Post added",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    },
+                    "route": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "posttitle": {
+                          "type": "string"
+                        },
+                        "postimage": {
+                          "type": "string"
+                        },
+                        "postcontent": {
+                          "type": "string"
+                        },
+                        "postauthor": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "500": {
+            "description": "Error while writing to database"
+          },
+          "400": {
+            "description": "Validation Error"
+          }
+        }
+      }
+    },
+    "/posts/add-comment": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Register or Add new Post",
         "parameters": [
           {
             "name": "user",
             "in": "body",
-            "description": "User that we want to login or authenticate",
+            "description": "Comment details",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/comment"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfull login",
+            "description": "Comment Added to the Post"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error While updating"
+          }
+        }
+      }
+    },
+    "/posts/remove-comment": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Add comment to the post",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Comment of the post",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/deletecomment"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted from the post"
           },
           "401": {
-            "description": "User already loggedin"
+            "description": "Unauthorized Access"
           },
-          "422": {
+          "404": {
+            "description": "Either comment not found or post not found"
+          }
+        }
+      }
+    },
+    "/posts/my-post": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get all post of a particular user",
+        "responses": {
+          "200": {
+            "description": "Comment deleted from the post"
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "Either comment not found or post not found"
+          }
+        }
+      }
+    },
+    "/posts/edit-post": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Edit a particular post",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "posttitle",
+            "in": "formData",
+            "type": "string",
+            "description": "Title of the post"
+          },
+          {
+            "name": "postimage",
+            "in": "formData",
+            "type": "file",
+            "description": "Image to be uploaded"
+          },
+          {
+            "name": "postcontent",
+            "in": "formData",
+            "type": "string",
+            "description": "Content of the post"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted from the post"
+          },
+          "400":{
             "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Error While updating"
+          }
+        }
+      }
+    },
+    "/posts/delete-post": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Edit a particular post",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "description": "Title of the post"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted from the post"
+          },
+          "400":{
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized Access"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Error While updating"
           }
         }
       }
@@ -141,7 +436,11 @@
       }
     },
     "allposts": {
-      "required": ["postTitle", "postImage", "postContent", "postAuthor"],
+      "required": [
+        "postTitle",
+        "postImage",
+        "postContent"
+      ],
       "properties": {
         "postTitle": {
           "type": "string"
@@ -151,8 +450,47 @@
         },
         "postContent": {
           "type": "string"
+        }
+      }
+    },
+    "userLogin": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
         },
-        "postAuthor": {
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "comment": {
+      "required": [
+        "postId",
+        "comment"
+      ],
+      "properties": {
+        "postId": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "deletecomment": {
+      "required": [
+        "postId",
+        "commentId"
+      ],
+      "properties": {
+        "postId": {
+          "type": "string"
+        },
+        "commentId": {
           "type": "string"
         }
       }

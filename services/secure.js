@@ -21,5 +21,5 @@ function decrypt(text) {
 }
 
 // console.log(encrypt('admin@0001'));
-// console.log(decrypt('d010ec6eaedf8fb2bd5ac5067c7826b4'));
+// console.log(decrypt('456bc8d691b70463b43afe4d6664694c'));
 module.exports = { encrypt, decrypt }

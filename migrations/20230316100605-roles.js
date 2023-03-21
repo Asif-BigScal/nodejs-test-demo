@@ -16,6 +16,6 @@ module.exports = {
   },
 
   async down(db, client) {
-    db.collection('roles').drop();
+    await db.collection('roles').drop();
   }
 };

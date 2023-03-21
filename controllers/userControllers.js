@@ -8,7 +8,6 @@ const { userRoles } = require('../model/enumUser');
 async function userRegister(req, res) {
     try {
         const validData = await req.body;
-        console.log(req.body);
         const userExist = await Users.find({ email: validData.email, isDeleted: false });
         if (userExist.length) {
             throw new Error('403-User already Exist');

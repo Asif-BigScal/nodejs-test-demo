@@ -52,7 +52,6 @@ async function registerPost(req, res) {
             const route = await isAdmin(req.user.role) ? '/admin/' : '/posts/all-post'
             res.status(200).json({
                 status: 200,
-                message: "OK",
                 route: route,
                 data: {
                     posttitle: saved.postTitle,
@@ -112,7 +111,7 @@ async function addComment(req, res) {
         const id = validData.postid;
         const post = await Posts.findOne({ _id: id, isDeleted: false });
         if (!post) {
-            throw new Error("500-Can't find the post");
+            throw new Error("404-Can't find the post");
         }
         else {
             const commentData = {

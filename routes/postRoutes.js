@@ -8,7 +8,7 @@ const { postDataValidator, postCommentValidator, postCommentRemoveValidator, idV
 const { validate } = require('express-validation');
 
 router.get('/', displayPost);
-router.get('/all-post', displayPostLoggedIn);
+router.get('/all-post', authorize(), displayPostLoggedIn);
 router.get('/register', displayRegisterPage);
 router.get('/single-post', validate(idValidator), singlePost)
 router.post('/register', authorize(), upload.single('postimage'), validate(postDataValidator), registerPost);
